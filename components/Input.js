@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import { StyleSheet, View, TextInput, Button } from 'react-native';
+import { StyleSheet, View, TextInput, Button, Modal } from 'react-native';
 
 const Input = props => {
   // States
@@ -10,41 +10,64 @@ const Input = props => {
     setEnteredGoal(text);
   }
 
+  const addGoalHandler = () => {
+    props.onAddGoal(enteredGoal)
+    setEnteredGoal('');
+  }
+
   return (
-    <View style={styles.inputWrapper}>
-      <TextInput 
-        style={styles.goalInput}
-        placeholder="Add a new course goal!"
-        onChangeText={inputHandler}
-        value={enteredGoal}
-      />
-      <Button 
-        style={styles.goalButton}
-        color="#000"
-        title="ADD"
-        onPress={props.onAddGoal.bind(this, enteredGoal)}
-      />
-    </View>
+    <Modal
+      visible={props.visible}
+      animationType="slide"
+    >
+      <View style={styles.inputWrapper}>
+        <TextInput 
+          style={styles.goalInput}
+          placeholder="Add a new course goal!"
+          onChangeText={inputHandler}
+          value={enteredGoal}
+        />
+        <View style={styles.buttonsWrapper}>
+          <Button 
+            style={styles.goalButton}
+            title="ADD"
+            onPress={addGoalHandler}
+          />
+          <Button 
+            style={styles.goalButton}
+            color="red"
+            title="CANCEL"
+            onPress={props.onCancel}
+          />
+        </View>
+      </View>
+    </Modal>
   );
 }
 
 const styles = StyleSheet.create({
   inputWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
+    flex: 1
   },
   goalInput: {
     borderColor: '#000',
     borderWidth: 1,
     padding: 10,
-    flex: 3
+    width: '80%'
+  },
+  buttonsWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '50%',
+    marginVertical: 20
   },
   goalButton: {
-    width: '20%',
+    width: '50%',
     borderColor: '#000',
-    flex: 1
   }
 });
 
